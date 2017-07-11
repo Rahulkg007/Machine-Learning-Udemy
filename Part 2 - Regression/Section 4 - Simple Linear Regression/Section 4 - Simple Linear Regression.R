@@ -1,5 +1,5 @@
 #Import Data
-setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Part 2 - Regression/Section 4 - Simple Linear Regression")
+setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 4 - Simple Linear Regression")
 dataset <- read.csv("Salary_Data.csv")
 
 #Splitting the dataset into training and test set
@@ -17,6 +17,7 @@ regressor <- lm(formula = Salary ~ YearsExperience, data = training_set)
 y_pred <- predict(regressor, newdata = test_set)
 
 #Visualizing the training set results
+require(tidyverse)
 ggplot() +
   geom_point(data = training_set, mapping = aes(x=YearsExperience, y = Salary), colour = "Red") +
   geom_line(mapping = aes(x=training_set$YearsExperience, y = predict(regressor, newdata = training_set)), colour = "grey") +
