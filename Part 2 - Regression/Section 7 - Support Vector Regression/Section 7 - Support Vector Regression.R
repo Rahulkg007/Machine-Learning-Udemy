@@ -29,13 +29,12 @@ regressor = svm(formula = Salary ~ .,
 # Predicting a new result using SVR 
 y_pred <- predict(object = regressor, newdata = data.frame(Level = 6.5))
 
-# Visualizing SVR Model with ggplot ( For Higer Ressolution and smoother curve)
+# Visualizing SVR Model with ggplot ( For Higer Resolution and smoother curve)
 x_grid <- seq(min(dataset$Level), max(dataset$Level), 0.1)
 ggplot() + 
   geom_point(data = dataset, mapping = aes(x = Level, y = Salary), colour = "#756bb1") +
   geom_line(mapping = aes(x = dataset$Level, y = predict(regressor, newdata = dataset)), 
-              colour = '#fc9272', se = FALSE) +
+              colour = '#fc9272') +
   ggtitle('SVR') +
   xlab('Levels') + 
   xlab('Salary')
-  

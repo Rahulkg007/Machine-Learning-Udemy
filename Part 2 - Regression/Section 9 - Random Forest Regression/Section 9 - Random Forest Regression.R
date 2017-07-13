@@ -1,11 +1,11 @@
-# Section 8 - Decision Tree Regression #
+# Section 9 - Random Forest Regression #
 
 # Importing Libraries
 require(tidyverse)
 require(caTools)
 
 # Importing the dataset
-setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 7 - Support Vector Regression")
+setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 9 - Random Forest Regression")
 dataset <- read.csv('Position_Salaries.csv')
 dataset <- dataset[,2:3]
 
@@ -21,19 +21,21 @@ dataset <- dataset[,2:3]
 # test_set = scale(test_set)
 
 # Fitting regression to the data
-require(e1071)
-regressor = svm(formula = Salary ~ .,
-                data = dataset,
-                type = 'eps-regression')
+require(randomForest)
+set.seed(1234)
+regressor = randomForest(x = dataset[1],
+                         y = dataset$Salary,
+                         ntree = 500)
 
-# Predicting a new result using Decision Tree Regression 
+# Predicting a new result using SVR 
 y_pred <- predict(object = regressor, newdata = data.frame(Level = 6.5))
 
-# Visualizing Decision Tree Regression Model with ggplot
+# Visualizing SVR Model with ggplot ( For Higer Ressolution and smoother curve)
+x_grid <- seq(min(dataset$Level), max(dataset$Level), 0.001)
 ggplot() + 
   geom_point(data = dataset, mapping = aes(x = Level, y = Salary), colour = "#756bb1") +
-  geom_line(mapping = aes(x = dataset$Level, y = predict(regressor, newdata = dataset)), 
-            colour = '#fc9272', se = FALSE) +
-  ggtitle('Decision Tree Regression') +
+  geom_line(mapping = aes(x = x_grid, y = predict(regressor, newdata = data.frame(Level = x_grid))), 
+            colour = '#fc9272') +
+  ggtitle('Random Forest Regression') +
   xlab('Levels') + 
   xlab('Salary')
