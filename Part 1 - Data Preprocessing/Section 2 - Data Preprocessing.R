@@ -1,6 +1,11 @@
+# Importing Libraries
+require(tidyverse)
+require(caTools)
+
 # Importing the dataset
-setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Part 1 - Data Preprocessing")
-dataset <- read.csv("Data.csv")
+setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 9 - Random Forest Regression")
+dataset <- read.csv('Position_Salaries.csv')
+# dataset <- dataset[,2:3]
 
 #Splitting the dataset into training and test set
 require(caTools)
