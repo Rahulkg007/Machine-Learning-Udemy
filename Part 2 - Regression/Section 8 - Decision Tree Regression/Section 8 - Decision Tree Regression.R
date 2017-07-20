@@ -1,18 +1,15 @@
-# Section 8 - Decision Tree Regression #
-
-# Importing Libraries
-require(tidyverse)
-require(caTools)
+# Decision Tree Regression
 
 # Importing the dataset
-setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 7 - Support Vector Regression")
-dataset <- read.csv('Position_Salaries.csv')
-dataset <- dataset[,2:3]
+setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 2 - Regression/Section 8 - Decision Tree Regression")
+dataset = read.csv('Position_Salaries.csv')
+dataset = dataset[2:3]
 
 # Splitting the dataset into the Training set and Test set
-# install.packages('caTools')
+# # install.packages('caTools')
+# library(caTools)
 # set.seed(123)
-# split = sample.split(dataset$Profit, SplitRatio = 0.8)
+# split = sample.split(dataset$Salary, SplitRatio = 2/3)
 # training_set = subset(dataset, split == TRUE)
 # test_set = subset(dataset, split == FALSE)
 
@@ -20,20 +17,29 @@ dataset <- dataset[,2:3]
 # training_set = scale(training_set)
 # test_set = scale(test_set)
 
-# Fitting regression to the data
-require(e1071)
-regressor = svm(formula = Salary ~ .,
-                data = dataset,
-                type = 'eps-regression')
+# Fitting Decision Tree Regression to the dataset
+# install.packages('rpart')
+library(rpart)
+regressor = rpart(formula = Salary ~ .,
+                  data = dataset,
+                  control = rpart.control(minsplit = 1))
 
-# Predicting a new result using Decision Tree Regression 
-y_pred <- predict(object = regressor, newdata = data.frame(Level = 6.5))
+# Predicting a new result with Decision Tree Regression
+y_pred = predict(regressor, data.frame(Level = 6.5))
 
-# Visualizing Decision Tree Regression Model with ggplot
-ggplot() + 
-  geom_point(data = dataset, mapping = aes(x = Level, y = Salary), colour = "#756bb1") +
-  geom_line(mapping = aes(x = dataset$Level, y = predict(regressor, newdata = dataset)), 
-            colour = '#fc9272', se = FALSE) +
-  ggtitle('Decision Tree Regression') +
-  xlab('Levels') + 
-  xlab('Salary')
+# Visualising the Decision Tree Regression results (higher resolution)
+# install.packages('ggplot2')
+library(ggplot2)
+x_grid = seq(min(dataset$Level), max(dataset$Level), 0.001)
+ggplot() +
+  geom_point(aes(x = dataset$Level, y = dataset$Salary),
+             colour = 'red') +
+  geom_line(aes(x = x_grid, y = predict(regressor, newdata = data.frame(Level = x_grid))),
+            colour = 'blue') +
+  ggtitle('Truth or Bluff (Decision Tree Regression)') +
+  xlab('Level') +
+  ylab('Salary')
+
+# Plotting the tree
+plot(regressor)
+text(regressor)
