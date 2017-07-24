@@ -1,7 +1,7 @@
-# Decision Tree
+# Random Forest Classification
 
 # Importing the dataset
-setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 3 - Classification/Section 19 - Decision Tree Classification")
+setwd("C:/Users/rahul/Documents/UserData/Online Training/Machine Learning A-Z/Manual/Part 3 - Classification/Section 20 - Random Forest Classification")
 dataset = read.csv('Social_Network_Ads.csv')
 dataset = dataset[3:5]
 
@@ -22,12 +22,13 @@ test_set[-3] = scale(test_set[-3])
 
 # Fitting Decision Tree SVM to the Training set 
 # install.packages("e1071")
-require(rpart)
-classifier <- rpart(formula = Purchased ~ .,
-                    data = training_set)
+require(randomForest)
+classifier <- randomForest(x = training_set[-3],
+                    y = training_set$Purchased,
+                    ntree = 10)
 
 # Predict the test set results
-y_pred <- predict(object = classifier, newdata = test_set[-3], type = 'class')
+y_pred <- predict(object = classifier, newdata = test_set[-3])
 
 # Making the Confusion Matrix
 cm = table(test_set[, 3], y_pred)
@@ -41,7 +42,7 @@ grid_set = expand.grid(X1, X2)
 colnames(grid_set) = c('Age', 'EstimatedSalary')
 y_grid = predict(classifier, newdata = grid_set, type = 'class')
 plot(set[, -3],
-     main = 'Decision Tree (Training set)',
+     main = 'Random Forest Classification (Training set)',
      xlab = 'Age', ylab = 'Estimated Salary',
      xlim = range(X1), ylim = range(X2))
 contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
@@ -57,13 +58,10 @@ grid_set = expand.grid(X1, X2)
 colnames(grid_set) = c('Age', 'EstimatedSalary')
 y_grid = predict(classifier, newdata = grid_set, type = 'class')
 plot(set[, -3],
-     main = 'Decision Tree (Test set)',
+     main = 'Random Forest Classification (Test set)',
      xlab = 'Age', ylab = 'Estimated Salary',
      xlim = range(X1), ylim = range(X2))
 contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
 points(grid_set, pch = '.', col = ifelse(y_grid == 1, 'springgreen3', 'tomato'))
 points(set, pch = 21, bg = ifelse(set[, 3] == 1, 'green4', 'red3'))
 
-# Plotting the decision tree
-plot(classifier)
-text(classifier)
